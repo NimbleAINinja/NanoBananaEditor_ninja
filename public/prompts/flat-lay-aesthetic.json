@@ -1,0 +1,13 @@
+{
+  "name": "Flat Lay Aesthetic",
+  "description": "Modern, styled top-down product photography.",
+  "prompt": "Generate a flat lay composition with the uploaded object arranged aesthetically.",
+  "style": "Minimalist, colorful, social-media-ready",
+  "lighting": "Soft, diffused, even",
+  "background": "Solid pastel or textured surface (e.g., marble, wood)",
+  "extras": {
+    "props": "Coordinated accessories (e.g., sunglasses, stationery, fruit)",
+    "composition": "Top-down symmetry or loose scatter",
+    "mood": "Playful, trendy"
+  }
+}

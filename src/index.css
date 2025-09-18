@@ -38,7 +38,7 @@ body {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #FDE047;
+  background: #FB923C;
   cursor: pointer;
   border: 2px solid #1F2937;
 }
@@ -47,7 +47,7 @@ body {
   height: 16px;
   width: 16px;
   border-radius: 50%;
-  background: #FDE047;
+  background: #FB923C;
   cursor: pointer;
   border: 2px solid #1F2937;
 }
@@ -65,7 +65,7 @@ body {
 
 /* Focus styles for accessibility */
 *:focus-visible {
-  outline: 2px solid #FDE047;
+  outline: 2px solid #FB923C;
   outline-offset: 2px;
 }
 

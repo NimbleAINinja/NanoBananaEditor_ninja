@@ -97,7 +97,7 @@ export const HistoryPanel: React.FC = () => {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {/* Show generations */}
-            {generations.slice(-2).map((generation, index) => (
+            {generations.slice(-5).map((generation, index) => (
               <div
                 key={generation.id}
                 className={cn(
@@ -135,7 +135,7 @@ export const HistoryPanel: React.FC = () => {
             ))}
             
             {/* Show edits */}
-            {edits.slice(-2).map((edit, index) => (
+            {edits.slice(-5).map((edit, index) => (
               <div
                 key={edit.id}
                 className={cn(

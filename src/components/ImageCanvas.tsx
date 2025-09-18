@@ -347,22 +347,7 @@ export const ImageCanvas: React.FC = () => {
             )}
           </div>
           
-          <div className="flex items-center space-x-2">
-            <span className="text-xs text-gray-500">
-              © 2025 Mark Fulton - 
-              <a
-                href="https://www.reinventing.ai/"
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-yellow-400 hover:text-yellow-300 transition-colors ml-1"
-              >
-                Reinventing.AI Solutions
-              </a>
-            </span>
-            <span className="text-gray-600 hidden md:inline">•</span>
-            <span className="text-yellow-400 hidden md:inline">⚡</span>
-            <span className="hidden md:inline">Powered by Gemini 2.5 Flash Image</span>
-          </div>
+          <div className="flex items-center space-x-2"></div>
         </div>
       </div>
     </div>

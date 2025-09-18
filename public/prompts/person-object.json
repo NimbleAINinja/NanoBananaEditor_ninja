@@ -1,0 +1,25 @@
+{
+  "mode": "image_to_image",
+  "input_images": [
+    {
+      "id": "person_image",
+      "description": "A person who will be shown interacting with the product."
+    },
+    {
+      "id": "product_image",
+      "description": "The product to be placed in the scene."
+    }
+  ],
+  "prompt": "Create a photorealistic image where the person from 'person_image' is naturally interacting with the object from 'product_image'. The interaction should feel logical, comfortable, and realistic – for example, the person might be holding, using, wearing, or looking at the product. Ensure the lighting, perspective, and proportions of both images are harmonized so they appear in the same scene. Blend seamlessly with no visible artifacts from the source images. Maintain high resolution and an advertising-ready, polished look.",
+  "composition": {
+    "style": "photorealistic commercial photography",
+    "framing": "medium shot, product and person clearly visible",
+    "orientation": "upright, natural posture",
+    "background": "neutral or contextually appropriate setting that enhances the product"
+  },
+  "output": {
+    "resolution": "high",
+    "aspect_ratio": "4:5",
+    "quality": "advertising-grade"
+  }
+}

@@ -1,0 +1,6 @@
+[
+  { "name": "Cinematic Style", "file": "cinematic.json" },
+  { "name": "Pixel Art", "file": "pixel-art.json" },
+  { "name": "Person with object", "file": "person-object.json" },
+  { "name": "Flat-lay aesthetic", "file": "flat-lay-aesthetic.json" }
+]

@@ -1,12 +1,14 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { Textarea } from './ui/Textarea';
 import { Button } from './ui/Button';
+import { Select } from './ui/Select';
 import { useAppStore } from '../store/useAppStore';
+import { usePromptTemplates } from '../hooks/usePromptTemplates';
 import { useImageGeneration, useImageEditing } from '../hooks/useImageGeneration';
-import { Upload, Wand2, Edit3, MousePointer, HelpCircle, Menu, ChevronDown, ChevronRight, RotateCcw } from 'lucide-react';
-import { blobToBase64 } from '../utils/imageUtils';
+import { Wand2, Edit3, MousePointer, HelpCircle, ChevronDown, ChevronRight, RotateCcw } from 'lucide-react';
 import { PromptHints } from './PromptHints';
 import { cn } from '../utils/cn';
+import { ImageUploader } from './ImageUploader';
 
 export const PromptComposer: React.FC = () => {
   const {
@@ -36,10 +38,21 @@ export const PromptComposer: React.FC = () => {
 
   const { generate } = useImageGeneration();
   const { edit } = useImageEditing();
+  const { templates, selectedTemplateContent, loadTemplate } = usePromptTemplates();
+  const [selectedTemplateFile, setSelectedTemplateFile] = useState('');
+
   const [showAdvanced, setShowAdvanced] = useState(false);
   const [showClearConfirm, setShowClearConfirm] = useState(false);
   const [showHintsModal, setShowHintsModal] = useState(false);
-  const fileInputRef = useRef<HTMLInputElement>(null);
+
+  useEffect(() => {
+    if (selectedTemplateFile) {
+      loadTemplate(selectedTemplateFile);
+    } else {
+      // Clear content when "Select a template..." is chosen
+      loadTemplate(''); 
+    }
+  }, [selectedTemplateFile, loadTemplate]);
 
   const handleGenerate = () => {
     if (!currentPrompt.trim()) return;
@@ -57,39 +70,6 @@ export const PromptComposer: React.FC = () => {
       });
     } else if (selectedTool === 'edit' || selectedTool === 'mask') {
       edit(currentPrompt);
-    }
-  };
-
-  const handleFileUpload = async (event: React.ChangeEvent<HTMLInputElement>) => {
-    const file = event.target.files?.[0];
-    if (file && file.type.startsWith('image/')) {
-      try {
-        const base64 = await blobToBase64(file);
-        const dataUrl = `data:${file.type};base64,${base64}`;
-        
-        if (selectedTool === 'generate') {
-          // Add to reference images (max 2)
-          if (uploadedImages.length < 2) {
-            addUploadedImage(dataUrl);
-          }
-        } else if (selectedTool === 'edit') {
-          // For edit mode, add to separate edit reference images (max 2)
-          if (editReferenceImages.length < 2) {
-            addEditReferenceImage(dataUrl);
-          }
-          // Set as canvas image if none exists
-          if (!canvasImage) {
-            setCanvasImage(dataUrl);
-          }
-        } else if (selectedTool === 'mask') {
-          // For mask mode, set as canvas image immediately
-          clearUploadedImages();
-          addUploadedImage(dataUrl);
-          setCanvasImage(dataUrl);
-        }
-      } catch (error) {
-        console.error('Failed to upload image:', error);
-      }
     }
   };
 
@@ -173,69 +153,8 @@ export const PromptComposer: React.FC = () => {
         </div>
       </div>
 
-      {/* File Upload */}
-      <div>
-        <div>
-          <label className="text-sm font-medium text-gray-300 mb-1 block">
-            {selectedTool === 'generate' ? 'Reference Images' : selectedTool === 'edit' ? 'Style References' : 'Upload Image'}
-          </label>
-          {selectedTool === 'mask' && (
-            <p className="text-xs text-gray-400 mb-3">Edit an image with masks</p>
-          )}
-          {selectedTool === 'generate' && (
-            <p className="text-xs text-gray-500 mb-3">Optional, up to 2 images</p>
-          )}
-          {selectedTool === 'edit' && (
-            <p className="text-xs text-gray-500 mb-3">
-              {canvasImage ? 'Optional style references, up to 2 images' : 'Upload image to edit, up to 2 images'}
-            </p>
-          )}
-          <input
-            ref={fileInputRef}
-            type="file"
-            accept="image/*"
-            onChange={handleFileUpload}
-            className="hidden"
-          />
-          <Button
-            variant="outline"
-            onClick={() => fileInputRef.current?.click()}
-            className="w-full"
-            disabled={
-              (selectedTool === 'generate' && uploadedImages.length >= 2) ||
-              (selectedTool === 'edit' && editReferenceImages.length >= 2)
-            }
-          >
-            <Upload className="h-4 w-4 mr-2" />
-            Upload
-          </Button>
-          
-          {/* Show uploaded images preview */}
-          {((selectedTool === 'generate' && uploadedImages.length > 0) || 
-            (selectedTool === 'edit' && editReferenceImages.length > 0)) && (
-            <div className="mt-3 space-y-2">
-              {(selectedTool === 'generate' ? uploadedImages : editReferenceImages).map((image, index) => (
-                <div key={index} className="relative">
-                  <img
-                    src={image}
-                    alt={`Reference ${index + 1}`}
-                    className="w-full h-20 object-cover rounded-lg border border-gray-700"
-                  />
-                  <button
-                    onClick={() => selectedTool === 'generate' ? removeUploadedImage(index) : removeEditReferenceImage(index)}
-                    className="absolute top-1 right-1 bg-gray-900/80 text-gray-400 hover:text-gray-200 rounded-full p-1 transition-colors"
-                  >
-                    ×
-                  </button>
-                  <div className="absolute bottom-1 left-1 bg-gray-900/80 text-xs px-2 py-1 rounded text-gray-300">
-                    Ref {index + 1}
-                  </div>
-                </div>
-              ))}
-            </div>
-          )}
-        </div>
-      </div>
+      {/* Image Uploader */}
+      <ImageUploader />
 
       {/* Prompt Input */}
       <div>
@@ -252,8 +171,46 @@ export const PromptComposer: React.FC = () => {
           }
           className="min-h-[120px] resize-none"
         />
-        
-        {/* Prompt Quality Indicator */}
+      </div>
+
+      {/* Prompt Templates */}
+      {selectedTool === 'generate' && (
+        <div>
+          <label className="text-sm font-medium text-gray-300 mb-3 block">
+            Templates
+          </label>
+          <div className="flex space-x-2">
+            <Select
+              value={selectedTemplateFile}
+              onChange={(e) => setSelectedTemplateFile(e.target.value)}
+              className="flex-grow"
+            >
+              <option value="">Select a template...</option>
+              {templates.map((template) => (
+                <option key={template.file} value={template.file}>
+                  {template.name}
+                </option>
+              ))}
+            </Select>
+            <Button
+              variant="outline"
+              onClick={() => {
+                if (selectedTemplateContent) {
+                  const templateString = JSON.stringify(selectedTemplateContent, null, 2);
+                  const newPrompt = currentPrompt ? `${currentPrompt}\n\n${templateString}` : templateString;
+                  setCurrentPrompt(newPrompt);
+                }
+              }}
+              disabled={!selectedTemplateContent}
+            >
+              Insert
+            </Button>
+          </div>
+        </div>
+      )}
+
+      {/* Prompt Quality Indicator */}
+      <div>
         <button 
           onClick={() => setShowHintsModal(true)}
           className="mt-2 flex items-center text-xs hover:text-gray-400 transition-colors group"
@@ -272,7 +229,6 @@ export const PromptComposer: React.FC = () => {
           </span>
         </button>
       </div>
-
 
       {/* Generate Button */}
       <Button

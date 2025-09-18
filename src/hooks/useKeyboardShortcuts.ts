@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
 import { useAppStore } from '../store/useAppStore';
+import { useImageGeneration } from './useImageGeneration';
 
 export const useKeyboardShortcuts = () => {
   const {
@@ -9,8 +10,12 @@ export const useKeyboardShortcuts = () => {
     setShowPromptPanel,
     showPromptPanel,
     currentPrompt,
-    isGenerating
+    isGenerating,
+    seed,
+    temperature,
+    uploadedImages,
   } = useAppStore();
+  const { generate } = useImageGeneration();
 
   useEffect(() => {
     const handleKeyDown = (event: KeyboardEvent) => {
@@ -21,7 +26,12 @@ export const useKeyboardShortcuts = () => {
         if ((event.metaKey || event.ctrlKey) && event.key === 'Enter') {
           event.preventDefault();
           if (!isGenerating && currentPrompt.trim()) {
-            console.log('Generate via keyboard shortcut');
+            generate({
+              prompt: currentPrompt,
+              seed: seed ?? undefined,
+              temperature,
+              referenceImages: uploadedImages.map(img => img.split('base64,')[1]),
+            });
           }
         }
         return;
@@ -59,5 +69,17 @@ export const useKeyboardShortcuts = () => {
 
     window.addEventListener('keydown', handleKeyDown);
     return () => window.removeEventListener('keydown', handleKeyDown);
-  }, [setSelectedTool, setShowHistory, showHistory, setShowPromptPanel, showPromptPanel, currentPrompt, isGenerating]);
+  }, [
+    setSelectedTool, 
+    setShowHistory, 
+    showHistory, 
+    setShowPromptPanel, 
+    showPromptPanel, 
+    currentPrompt, 
+    isGenerating, 
+    generate, 
+    seed, 
+    temperature, 
+    uploadedImages
+  ]);
 };
