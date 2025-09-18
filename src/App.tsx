@@ -1,9 +1,10 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { cn } from './utils/cn';
 import { PromptComposer } from './components/PromptComposer';
 import { ImageCanvas } from './components/ImageCanvas';
 import { HistoryPanel } from './components/HistoryPanel';
+import { PhotoEditorModal } from './components/PhotoEditorModal';
 import { useKeyboardShortcuts } from './hooks/useKeyboardShortcuts';
 import { useAppStore } from './store/useAppStore';
 
@@ -19,10 +20,18 @@ const queryClient = new QueryClient({
 function AppContent() {
   useKeyboardShortcuts();
   
-  const { showPromptPanel, setShowPromptPanel, showHistory, setShowHistory } = useAppStore();
+  const {
+    showPromptPanel,
+    setShowPromptPanel,
+    showHistory,
+    setShowHistory,
+    selectedTool,
+    canvasImage,
+    openPhotoEditor,
+  } = useAppStore();
   
   // Set mobile defaults on mount
-  React.useEffect(() => {
+  useEffect(() => {
     const checkMobile = () => {
       const isMobile = window.innerWidth < 768;
       if (isMobile) {
@@ -35,6 +44,12 @@ function AppContent() {
     window.addEventListener('resize', checkMobile);
     return () => window.removeEventListener('resize', checkMobile);
   }, [setShowPromptPanel, setShowHistory]);
+
+  useEffect(() => {
+    if (selectedTool === 'edit' && canvasImage) {
+      openPhotoEditor(canvasImage);
+    }
+  }, [selectedTool, canvasImage, openPhotoEditor]);
 
   return (
     <div className="h-screen bg-gray-900 text-gray-100 flex flex-col font-sans">
@@ -49,6 +64,7 @@ function AppContent() {
           <HistoryPanel />
         </div>
       </div>
+      <PhotoEditorModal />
     </div>
   );
 }

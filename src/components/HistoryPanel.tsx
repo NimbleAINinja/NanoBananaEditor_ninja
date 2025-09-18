@@ -4,6 +4,7 @@ import { Button } from './ui/Button';
 import { History, Download, Image as ImageIcon, Layers } from 'lucide-react';
 import { cn } from '../utils/cn';
 import { ImagePreviewModal } from './ImagePreviewModal';
+import { Generation, Edit } from '../types';
 
 export const HistoryPanel: React.FC = () => {
   const {
@@ -97,7 +98,7 @@ export const HistoryPanel: React.FC = () => {
         ) : (
           <div className="grid grid-cols-2 gap-3">
             {/* Show generations */}
-            {generations.slice(-5).map((generation, index) => (
+            {generations.slice(-5).map((generation: Generation, index: number) => (
               <div
                 key={generation.id}
                 className={cn(
@@ -135,7 +136,7 @@ export const HistoryPanel: React.FC = () => {
             ))}
             
             {/* Show edits */}
-            {edits.slice(-5).map((edit, index) => (
+            {edits.slice(-5).map((edit: Edit, index: number) => (
               <div
                 key={edit.id}
                 className={cn(
@@ -197,8 +198,8 @@ export const HistoryPanel: React.FC = () => {
       <div className="mb-6 p-4 bg-gray-900 rounded-lg border border-gray-700 flex-1 overflow-y-auto min-h-0">
         <h4 className="text-xs font-medium text-gray-400 mb-2">Generation Details</h4>
         {(() => {
-          const gen = generations.find(g => g.id === selectedGenerationId);
-          const selectedEdit = edits.find(e => e.id === selectedEditId);
+          const gen = generations.find((g: Generation) => g.id === selectedGenerationId);
+          const selectedEdit = edits.find((e: Edit) => e.id === selectedEditId);
           
           if (gen) {
             return (

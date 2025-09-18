@@ -158,6 +158,22 @@
 3. Verify import paths are correct
 4. Update TypeScript and related packages
 
+### Photo Editor Issues
+
+#### Editor Not Loading
+**Problem**: The photo editor modal doesn't open or appears empty.
+**Solutions**:
+1. Check the browser console for any errors related to the photo editor SDK.
+2. Ensure that the image you are trying to edit is a valid and supported format.
+3. Try clearing your browser's cache and reloading the application.
+
+#### Adjustments Not Applying
+**Problem**: Color adjustments or transformations are not being applied to the image.
+**Solutions**:
+1. Verify that you are in "Edit" mode and have an image loaded in the editor.
+2. Check the browser console for any errors when you try to apply an adjustment.
+3. Ensure that the photo editor SDK is properly initialized.
+
 ### Browser Compatibility
 
 #### Supported Browsers

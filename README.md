@@ -34,6 +34,12 @@ A production-ready React + TypeScript application for delightful image generatio
 - **Mobile Optimized** - Responsive design that works beautifully on all devices
 - **Keyboard Shortcuts** - Efficient workflow with hotkeys
 
+### 📷 **Photo Editor**
+- **Non-Destructive Editing** - All edits are non-destructive
+- **Color Adjustments** - Adjust brightness, contrast, saturation, and blur
+- **Transformations** - Crop, rotate, and flip images
+- **Filter Effects** - Apply a variety of filter effects to your images
+
 ### 📚 **Project Management**
 - **Generation History** - Track all your creations and edits
 - **Variant Comparison** - Generate and compare multiple versions side-by-side
@@ -112,7 +118,7 @@ A production-ready React + TypeScript application for delightful image generatio
 
 ### Tech Stack
 - **Frontend**: React 18, TypeScript, Tailwind CSS
-- **State Management**: Zustand for app state, React Query for server state  
+- **State Management**: Zustand is used for global UI state, while React Query handles server state, caching, and data fetching.
 - **Canvas**: Konva.js for interactive image display and mask overlays
 - **AI Integration**: Google Generative AI SDK (Gemini 2.5 Flash Image)
 - **Storage**: IndexedDB for offline asset caching
@@ -126,6 +132,7 @@ src/
 │   ├── PromptComposer.tsx  # Prompt input and tool selection
 │   ├── ImageCanvas.tsx     # Interactive canvas with Konva
 │   ├── HistoryPanel.tsx    # Generation history and variants
+│   ├── PhotoEditorModal.tsx # Photo editor modal
 │   ├── Header.tsx          # App header and navigation
 │   └── InfoModal.tsx       # About modal with links
 ├── services/           # External service integrations

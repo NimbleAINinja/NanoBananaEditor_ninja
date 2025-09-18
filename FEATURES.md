@@ -2,7 +2,7 @@
 
 ## Core Capabilities
 
-NanoBananaEditor provides a comprehensive suite of AI-powered image generation and editing tools built on Google's Gemini 2.5 Flash API.
+NanoBananaEditor provides a comprehensive suite of AI-powered image generation and editing tools built on Google's Gemini 2.5 Flash API. It also includes a full-featured photo editor for non-destructive image adjustments.
 
 ## Image Generation
 
@@ -26,6 +26,12 @@ NanoBananaEditor provides a comprehensive suite of AI-powered image generation a
 - **Quality Settings**: Balance between speed and quality
 
 ## Image Editing
+
+### Photo Editor
+- **Color Adjustments**: Fine-tune brightness, contrast, saturation, and blur
+- **Transformations**: Crop, rotate, and flip images
+- **Filters**: Apply a variety of artistic filters
+- **Non-Destructive**: All edits can be undone
 
 ### Selective Editing with Masks
 - **Interactive Masking**: Draw precise selection areas with brush tool

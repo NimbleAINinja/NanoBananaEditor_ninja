@@ -1,67 +1,73 @@
+export interface PhotoEditorError {
+  type: 'sdk-load' | 'image-load' | 'save-failure' | 'unknown';
+  message: string;
+  recoverable: boolean;
+  retryAction?: () => void;
+  details?: string;
+}
+
+export interface PhotoEditSession {
+  originalImageUrl: string;
+  finalImageUrl: string;
+  operations: any[];
+  duration: number;
+}
+
+export interface Project {
+  id: string;
+  name: string;
+  createdAt: number;
+  updatedAt: number;
+  generations: Generation[];
+  edits: Edit[];
+}
+
 export interface Asset {
   id: string;
-  type: 'original' | 'mask' | 'output';
   url: string;
-  mime: string;
-  width: number;
-  height: number;
-  checksum: string;
+  createdAt: string;
 }
 
 export interface Generation {
   id: string;
   prompt: string;
+  modelVersion: string;
   parameters: {
     seed?: number;
-    temperature?: number;
   };
   sourceAssets: Asset[];
   outputAssets: Asset[];
-  modelVersion: string;
-  timestamp: number;
-  costEstimate?: number;
+  createdAt: number;
 }
 
 export interface Edit {
   id: string;
   parentGenerationId: string;
-  maskAssetId?: string;
-  maskReferenceAsset?: Asset;
   instruction: string;
   outputAssets: Asset[];
   timestamp: number;
-}
-
-export interface Project {
-  id: string;
-  title: string;
-  generations: Generation[];
-  edits: Edit[];
-  createdAt: number;
-  updatedAt: number;
+  maskAssetId?: string;
+  maskReferenceAsset?: Asset;
 }
 
 export interface SegmentationMask {
   id: string;
-  imageData: ImageData;
-  bounds: {
-    x: number;
-    y: number;
-    width: number;
-    height: number;
-  };
-  feather: number;
+  imageUrl: string;
+  createdAt: number;
 }
 
 export interface BrushStroke {
   id: string;
   points: number[];
   brushSize: number;
-  color: string;
 }
 
-export interface PromptHint {
-  category: 'subject' | 'scene' | 'action' | 'style' | 'camera';
-  text: string;
-  example: string;
+export interface EditingHistory {
+  operation: string;
+  timestamp: number;
+}
+
+export interface PhotoEditAsset extends Asset {
+  type: 'photo-edit';
+  photoEditMetadata: PhotoEditSession;
 }

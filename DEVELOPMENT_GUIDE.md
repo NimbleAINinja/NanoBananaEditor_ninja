@@ -39,6 +39,7 @@ src/
 │   ├── PromptComposer.tsx # Prompt input interface
 │   ├── HistoryPanel.tsx # Generation history
 │   ├── ImagePreviewModal.tsx # Image preview dialog
+│   ├── PhotoEditorModal.tsx # Photo editor modal
 │   ├── InfoModal.tsx   # Help and info dialog
 │   ├── MaskOverlay.tsx # Canvas mask visualization
 │   └── PromptHints.tsx # Prompt suggestions
@@ -84,11 +85,17 @@ interface AppState {
   
   // Upload and masking
   uploadState: UploadState;
-  brushStrokes: BrushStroke[];
+  brushStrobes: BrushStroke[];
   
   // History
   generations: Generation[];
   currentProject: Project | null;
+
+  // Photo Editor
+  photoEditor: {
+    isEditorOpen: boolean;
+    currentEditingImageUrl: string | null;
+  };
 }
 ```
 
@@ -117,6 +124,13 @@ The ImageCanvas uses React-Konva for interactive features:
 - Brush stroke drawing for masks
 - Touch-friendly mobile interactions
 - Coordinate conversion utilities
+
+### Photo Editor Components
+The PhotoEditorModal component provides a self-contained photo editing experience:
+- Color adjustments (brightness, contrast, etc.)
+- Transformations (crop, rotate, flip)
+- Filter effects
+- Non-destructive editing
 
 ### Best Practices
 - Use TypeScript for all components

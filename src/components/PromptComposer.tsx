@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Textarea } from './ui/Textarea';
 import { Button } from './ui/Button';
-import { Select } from './ui/Select';
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from './ui/Select';
 import { useAppStore } from '../store/useAppStore';
 import { usePromptTemplates } from '../hooks/usePromptTemplates';
 import { useImageGeneration, useImageEditing } from '../hooks/useImageGeneration';
@@ -182,15 +182,18 @@ export const PromptComposer: React.FC = () => {
           <div className="flex space-x-2">
             <Select
               value={selectedTemplateFile}
-              onChange={(e) => setSelectedTemplateFile(e.target.value)}
-              className="flex-grow"
+              onValueChange={setSelectedTemplateFile}
             >
-              <option value="">Select a template...</option>
-              {templates.map((template) => (
-                <option key={template.file} value={template.file}>
-                  {template.name}
-                </option>
-              ))}
+              <SelectTrigger className="flex-grow">
+                <SelectValue placeholder="Select a template..." />
+              </SelectTrigger>
+              <SelectContent>
+                {templates.map((template) => (
+                  <SelectItem key={template.file} value={template.file}>
+                    {template.name}
+                  </SelectItem>
+                ))}
+              </SelectContent>
             </Select>
             <Button
               variant="outline"

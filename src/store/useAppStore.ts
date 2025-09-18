@@ -36,6 +36,24 @@ interface AppState {
   
   // UI state
   selectedTool: 'generate' | 'edit' | 'mask';
+
+  // Photo Editor state
+  photoEditor: {
+    isEditorOpen: boolean;
+    currentEditingImageUrl: string | null;
+    currentEditingAssetId: string | null;
+    hasUnsavedChanges: boolean;
+    editingHistory: any[];
+    editorConfig: {
+      outputMime: string;
+      quality: number;
+      maxDimensions: { width: number; height: number };
+    };
+    currentError: any | null;
+    isLoading: boolean;
+    loadingMessage: string;
+    loadingProgress: number;
+  };
   
   // Actions
   setCurrentProject: (project: Project | null) => void;
@@ -70,6 +88,15 @@ interface AppState {
   setShowPromptPanel: (show: boolean) => void;
   
   setSelectedTool: (tool: 'generate' | 'edit' | 'mask') => void;
+  openPhotoEditor: (imageUrl: string, assetId?: string) => void;
+  closePhotoEditor: () => void;
+  setHasUnsavedChanges: (hasChanges: boolean) => void;
+  clearPhotoEditHistory: () => void;
+  resetPhotoEditor: () => void;
+  savePhotoEdit: (asset: any, session: any) => void;
+  setPhotoEditorError: (error: any | null) => void;
+  setPhotoEditorLoading: (isLoading: boolean, message?: string, progress?: number) => void;
+  addPhotoEditOperation: (operation: any) => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -100,6 +127,23 @@ export const useAppStore = create<AppState>()(
       showPromptPanel: true,
       
       selectedTool: 'generate',
+
+      photoEditor: {
+        isEditorOpen: false,
+        currentEditingImageUrl: null,
+        currentEditingAssetId: null,
+        hasUnsavedChanges: false,
+        editingHistory: [],
+        editorConfig: {
+          outputMime: 'image/jpeg',
+          quality: 90,
+          maxDimensions: { width: 1920, height: 1080 },
+        },
+        currentError: null,
+        isLoading: false,
+        loadingMessage: '',
+        loadingProgress: 0,
+      },
       
       // Actions
       setCurrentProject: (project) => set({ currentProject: project }),
@@ -158,6 +202,63 @@ export const useAppStore = create<AppState>()(
       setShowPromptPanel: (show) => set({ showPromptPanel: show }),
       
       setSelectedTool: (tool) => set({ selectedTool: tool }),
+      openPhotoEditor: (imageUrl, assetId) => set((state) => ({
+        photoEditor: {
+          ...state.photoEditor,
+          isEditorOpen: true,
+          currentEditingImageUrl: imageUrl,
+          currentEditingAssetId: assetId || null,
+        }
+      })),
+      closePhotoEditor: () => set((state) => ({
+        photoEditor: {
+          ...state.photoEditor,
+          isEditorOpen: false,
+          currentEditingImageUrl: null,
+          currentEditingAssetId: null,
+          hasUnsavedChanges: false,
+          editingHistory: [],
+        }
+      })),
+      setHasUnsavedChanges: (hasChanges) => set((state) => ({
+        photoEditor: { ...state.photoEditor, hasUnsavedChanges: hasChanges }
+      })),
+      clearPhotoEditHistory: () => set((state) => ({
+        photoEditor: { ...state.photoEditor, editingHistory: [] }
+      })),
+      resetPhotoEditor: () => set((state) => ({
+        photoEditor: {
+          ...state.photoEditor,
+          hasUnsavedChanges: false,
+          editingHistory: [],
+        }
+      })),
+      savePhotoEdit: (asset, session) => set((state) => ({
+        ...state,
+        canvasImage: asset.url,
+        photoEditor: {
+          ...state.photoEditor,
+          isEditorOpen: false,
+          hasUnsavedChanges: false,
+        },
+      })),
+      setPhotoEditorError: (error) => set((state) => ({
+        photoEditor: { ...state.photoEditor, currentError: error }
+      })),
+      setPhotoEditorLoading: (isLoading, message, progress) => set((state) => ({
+        photoEditor: {
+          ...state.photoEditor,
+          isLoading,
+          loadingMessage: message || '',
+          loadingProgress: progress || 0,
+        }
+      })),
+      addPhotoEditOperation: (operation) => set((state) => ({
+        photoEditor: {
+          ...state.photoEditor,
+          editingHistory: [...state.photoEditor.editingHistory, operation],
+        }
+      })),
     }),
     { name: 'nano-banana-store' }
   )

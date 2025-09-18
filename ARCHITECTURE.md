@@ -9,6 +9,7 @@ NanoBananaEditor is a React + TypeScript web application that provides AI-powere
 - **Canvas**: React-Konva for interactive image editing
 - **API Client**: Google Gemini AI (@google/genai)
 - **Styling**: Tailwind CSS + Radix UI components
+- **Photo Editor**: @ente-io/photo-editor-sdk
 - **Storage**: IndexedDB for local caching
 - **Build Tool**: Vite with React plugin
 
@@ -26,6 +27,7 @@ The application uses Zustand (`src/store/useAppStore.ts`) for centralized state 
 1. **Image Generation**: Text prompts + optional reference images → Gemini API → New Generation with assets
 2. **Image Editing**: Existing image + text instruction + optional mask → Gemini API → New Edit linked to parent
 3. **Mask Creation**: Canvas brush strokes → binary masks → used in edit requests
+4. **Photo Editing**: Image → Photo Editor → Edits applied → Save
 
 ### Service Layer
 - **GeminiService** (`src/services/geminiService.ts`): Handles all AI API interactions
@@ -39,6 +41,7 @@ The application uses Zustand (`src/store/useAppStore.ts`) for centralized state 
 - **ImageCanvas.tsx**: Interactive canvas using React-Konva for image display and mask drawing
 - **PromptComposer.tsx**: Input interface for prompts and generation parameters
 - **HistoryPanel.tsx**: Version history and project management
+- **PhotoEditorModal.tsx**: Modal for the photo editor
 - **Header.tsx**: Navigation and app controls
 
 ### UI Components (`src/components/ui/`)

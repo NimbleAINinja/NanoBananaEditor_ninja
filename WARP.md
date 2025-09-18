@@ -90,6 +90,12 @@ The `ImageCanvas` component uses **React-Konva** for:
 - Coordinate conversion between screen space and image space
 - Mobile-responsive touch interactions
 
+### Photo Editor System
+The `PhotoEditorModal` component uses the **@ente-io/photo-editor-sdk** for:
+- Non-destructive image editing
+- Color adjustments, transformations, and filters
+- A self-contained editing UI
+
 ### Project/History System
 - **Projects** contain multiple **Generations** (initial AI creations)
 - **Edits** are linked to parent generations and can have masks
@@ -124,6 +130,7 @@ npm install --save-dev @testing-library/react @testing-library/jest-dom vitest
 - **zustand**: State management
 - **@tanstack/react-query**: Server state management
 - **react-konva/konva**: Canvas and drawing functionality
+- **@ente-io/photo-editor-sdk**: Photo editor
 - **fabric**: Advanced image manipulation
 - **@radix-ui/***: UI components (Dialog, Select, Slider, Switch)
 - **lucide-react**: Icon library
